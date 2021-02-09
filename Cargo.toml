@@ -3,6 +3,7 @@ name = "tetcore-analytics"
 version = "0.1.4"
 authors = ["Matt Rutherford <matt@parity.io>"]
 edition = "2018"
+license = "GPL-3.0"
 
 [dependencies]
 actix = "0.10.0-alpha.1"
