@@ -1,1 +1,1 @@
-CREATE INDEX substrate_logs_node_ip_idx ON substrate_logs (node_ip);
+CREATE INDEX tetcore_logs_node_ip_idx ON tetcore_logs (node_ip);

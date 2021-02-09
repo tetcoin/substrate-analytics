@@ -1,1 +1,1 @@
-DROP INDEX substrate_logs_node_ip_idx;
+DROP INDEX tetcore_logs_node_ip_idx;

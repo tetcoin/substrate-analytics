@@ -67,7 +67,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  created_at AS \"time\",\n  cast(logs->>'time' as decimal) / 1000 as \"execution time\"\nFROM substrate_logs\nWHERE\n  $__timeFilter(created_at) AND logs->>'target' = '$target' AND logs->>'name' = '$span'\nORDER BY 1",
+          "rawSql": "SELECT\n  created_at AS \"time\",\n  cast(logs->>'time' as decimal) / 1000 as \"execution time\"\nFROM tetcore_logs\nWHERE\n  $__timeFilter(created_at) AND logs->>'target' = '$target' AND logs->>'name' = '$span'\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -79,7 +79,7 @@
               }
             ]
           ],
-          "table": "substrate_logs",
+          "table": "tetcore_logs",
           "timeColumn": "created_at",
           "timeColumnType": "timestamp",
           "where": [
@@ -147,7 +147,7 @@
           "value": "polkadot_runtime_common::slots"
         },
         "datasource": "PostgreSQL",
-        "definition": "select DISTINCT logs->>'target' from substrate_logs where logs->>'msg' = 'tracing.profiling';",
+        "definition": "select DISTINCT logs->>'target' from tetcore_logs where logs->>'msg' = 'tracing.profiling';",
         "hide": 0,
         "includeAll": false,
         "label": "target",
@@ -245,7 +245,7 @@
             "value": "polkadot_runtime_common::slots"
           }
         ],
-        "query": "select DISTINCT logs->>'target' from substrate_logs where logs->>'msg' = 'tracing.profiling';",
+        "query": "select DISTINCT logs->>'target' from tetcore_logs where logs->>'msg' = 'tracing.profiling';",
         "refresh": 0,
         "regex": "",
         "skipUrlSync": false,
@@ -263,14 +263,14 @@
           "value": "on_finalize"
         },
         "datasource": "PostgreSQL",
-        "definition": "select DISTINCT logs->>'name' from substrate_logs where logs->>'msg' = 'tracing.profiling' and logs->>'target' = '$target';",
+        "definition": "select DISTINCT logs->>'name' from tetcore_logs where logs->>'msg' = 'tracing.profiling' and logs->>'target' = '$target';",
         "hide": 0,
         "includeAll": false,
         "label": null,
         "multi": false,
         "name": "span",
         "options": [],
-        "query": "select DISTINCT logs->>'name' from substrate_logs where logs->>'msg' = 'tracing.profiling' and logs->>'target' = '$target';",
+        "query": "select DISTINCT logs->>'name' from tetcore_logs where logs->>'msg' = 'tracing.profiling' and logs->>'target' = '$target';",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,

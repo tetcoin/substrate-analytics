@@ -1,18 +1,18 @@
 // Copyright 2019 Parity Technologies (UK) Ltd.
-// This file is part of Substrate Analytics.
+// This file is part of Tetcore Analytics.
 
-// Substrate Analytics is free software: you can redistribute it and/or modify
+// Tetcore Analytics is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
-// Substrate Analytics is distributed in the hope that it will be useful,
+// Tetcore Analytics is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 
 // You should have received a copy of the GNU General Public License
-// along with Substrate Analytics.  If not, see <http://www.gnu.org/licenses/>.
+// along with Tetcore Analytics.  If not, see <http://www.gnu.org/licenses/>.
 
 use super::models::{Benchmark, BenchmarkEvent, NewBenchmark, NewBenchmarkEvent};
 use super::DbExecutor;
@@ -93,11 +93,11 @@ impl DbExecutor {
     fn get_targets(&self, id: i32) -> Result<Value, Error> {
         match self.with_connection(|conn| {
             let query = sql_query(
-                "SELECT DISTINCT logs->>'target' as target from substrate_logs \
+                "SELECT DISTINCT logs->>'target' as target from tetcore_logs \
                 WHERE logs->>'target' IS NOT NULL \
                 AND peer_connection_id = ANY (\
                     SELECT id from peer_connections WHERE peer_id = \
-                        (SELECT setup->'substrate'->>'peerId' as peer_id FROM benchmarks WHERE id = $1)\
+                        (SELECT setup->'tetcore'->>'peerId' as peer_id FROM benchmarks WHERE id = $1)\
                 ) ORDER BY target ASC",
             )
             .bind::<Integer, _>(id);

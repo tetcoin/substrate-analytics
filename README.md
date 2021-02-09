@@ -1,9 +1,9 @@
 ## Tetcore Analytics
 
-\* to connect to substrate-analytics you must whitelist your IP address in `deployment.template.yml`
+\* to connect to tetcore-analytics you must whitelist your IP address in `deployment.template.yml`
 
 Comprises a websocket server accepting incoming telemetry from multiple
-[Substrate](https://github.com/paritytech/substrate) nodes. substrate-analytics is designed to be resilient (to network errors),
+[Tetcore](https://github.com/tetcoin/tetcore) nodes. tetcore-analytics is designed to be resilient (to network errors),
 performant and horizontally scalable by deploying more servers.
 
 Telemetry is stored in a PostgreSQL database. Management of the database schema is via `diesel` migrations.
@@ -16,11 +16,11 @@ the data is accessed directly from the database by a suitable dashboard (eg. Gra
 ### Routes
 
 #### Data ingestion
-`substrate-analytics` can work in one of two modes: with or without purging data after `LOG_EXPIRY_H` hours. The mode it operates under depends on which of the following two endpoints you send data to from your substrate nodes.
+`tetcore-analytics` can work in one of two modes: with or without purging data after `LOG_EXPIRY_H` hours. The mode it operates under depends on which of the following two endpoints you send data to from your tetcore nodes.
 - **`/`**
-  - incoming telemetry (with expiry as set by `LOG_EXPIRY_H`) (ws) - set with this option in substrate cli: `--telemetry-url 'ws://127.0.0.1:8080 5'`
+  - incoming telemetry (with expiry as set by `LOG_EXPIRY_H`) (ws) - set with this option in tetcore cli: `--telemetry-url 'ws://127.0.0.1:8080 5'`
 - **`/audit`**
-  - incoming telemetry with no expiry (ws) - set with this option in substrate cli: `--telemetry-url 'ws://127.0.0.1:8080/audit 5'`
+  - incoming telemetry with no expiry (ws) - set with this option in tetcore cli: `--telemetry-url 'ws://127.0.0.1:8080/audit 5'`
 
 #### JSON endpoints
 `subtrate-analytics` includes a few convenience endpoints to query for common data.
@@ -57,12 +57,12 @@ the data is accessed directly from the database by a suitable dashboard (eg. Gra
 
 #### Self-monitoring
 
-Substrate Analytics provides a `/metrics` endpoint for Prometheus to useful to monitor the analytics instance itself. Visit the endpoint in a browser to see what metrics are available.
+Tetcore Analytics provides a `/metrics` endpoint for Prometheus to useful to monitor the analytics instance itself. Visit the endpoint in a browser to see what metrics are available.
 
 ### Set up for development and deployment
 - [Install Postgres](https://www.postgresql.org/docs/current/tutorial-install.html)
 - For development, create a `.env` file in the project root containing:
-    - `DATABASE_URL=postgres://username:password@localhost/substrate-analytics`
+    - `DATABASE_URL=postgres://username:password@localhost/tetcore-analytics`
     - `PORT=8080`
     - any other settings from the list of environment variables below
 - Next, install [Diesel cli](https://github.com/diesel-rs/diesel/tree/master/diesel_cli)
@@ -87,13 +87,13 @@ Optionally specify the following environment variables:
 - `CACHE_EXPIRY_S` (default: 3600) - expiry time (s) of log messages
 - `ASSETS_PATH` (default: `./static`) - static files path
 
-Include `RUST_LOG` in your `.env` file to make `substrate-analytics` log to stdout. A good development setting is `RUST_LOG = debug`.
+Include `RUST_LOG` in your `.env` file to make `tetcore-analytics` log to stdout. A good development setting is `RUST_LOG = debug`.
 
-Substrate log messages are batched together before they are sent off for storage in the postgres DB by the actor for `INSERT`. Batches include up to `DB_BATCH_SIZE` messages or `DB_SAVE_LATENCY_MS`, whichever is reached sooner.
+Tetcore log messages are batched together before they are sent off for storage in the postgres DB by the actor for `INSERT`. Batches include up to `DB_BATCH_SIZE` messages or `DB_SAVE_LATENCY_MS`, whichever is reached sooner.
 
 #### Benchmarking
 
-Substrate-analytics has endpoints to define benchmarks and host systems that run the benchmarks. This is
+Tetcore-analytics has endpoints to define benchmarks and host systems that run the benchmarks. This is
 designed to be cross-referenced with telemetry data to provide insights into the node and system under test.
 
 JSON endpoints:

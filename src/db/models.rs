@@ -1,20 +1,20 @@
 // Copyright 2019 Parity Technologies (UK) Ltd.
-// This file is part of Substrate Analytics.
+// This file is part of Tetcore Analytics.
 
-// Substrate Analytics is free software: you can redistribute it and/or modify
+// Tetcore Analytics is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
-// Substrate Analytics is distributed in the hope that it will be useful,
+// Tetcore Analytics is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 
 // You should have received a copy of the GNU General Public License
-// along with Substrate Analytics.  If not, see <http://www.gnu.org/licenses/>.
+// along with Tetcore Analytics.  If not, see <http://www.gnu.org/licenses/>.
 
-use crate::schema::{benchmark_events, benchmarks, peer_connections, substrate_logs};
+use crate::schema::{benchmark_events, benchmarks, peer_connections, tetcore_logs};
 use chrono::NaiveDateTime;
 use serde_json::Value;
 
@@ -52,8 +52,8 @@ pub struct NewBenchmark {
 }
 
 #[derive(Queryable, QueryableByName, Identifiable, Serialize, PartialEq, Clone, Debug)]
-#[table_name = "substrate_logs"]
-pub struct SubstrateLog {
+#[table_name = "tetcore_logs"]
+pub struct TetcoreLog {
     pub id: i32,
     pub created_at: NaiveDateTime,
     pub logs: Value,
@@ -61,8 +61,8 @@ pub struct SubstrateLog {
 }
 
 #[derive(Insertable, Debug, Serialize, Deserialize)]
-#[table_name = "substrate_logs"]
-pub struct NewSubstrateLog {
+#[table_name = "tetcore_logs"]
+pub struct NewTetcoreLog {
     pub logs: Value,
     pub peer_connection_id: i32,
     pub created_at: NaiveDateTime,

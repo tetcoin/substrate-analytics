@@ -1,1 +1,1 @@
-DROP INDEX substrate_logs_msg_type_idx;
+DROP INDEX tetcore_logs_msg_type_idx;

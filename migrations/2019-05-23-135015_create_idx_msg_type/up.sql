@@ -1,1 +1,1 @@
-CREATE INDEX substrate_logs_msg_type_idx ON substrate_logs USING BTREE ((logs->>'msg'));
+CREATE INDEX tetcore_logs_msg_type_idx ON tetcore_logs USING BTREE ((logs->>'msg'));

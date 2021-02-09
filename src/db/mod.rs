@@ -1,18 +1,18 @@
 // Copyright 2019 Parity Technologies (UK) Ltd.
-// This file is part of Substrate Analytics.
+// This file is part of Tetcore Analytics.
 
-// Substrate Analytics is free software: you can redistribute it and/or modify
+// Tetcore Analytics is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
-// Substrate Analytics is distributed in the hope that it will be useful,
+// Tetcore Analytics is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 
 // You should have received a copy of the GNU General Public License
-// along with Substrate Analytics.  If not, see <http://www.gnu.org/licenses/>.
+// along with Tetcore Analytics.  If not, see <http://www.gnu.org/licenses/>.
 
 pub mod benchmarks;
 pub mod filters;
@@ -30,7 +30,7 @@ use diesel::r2d2::{ConnectionManager, Pool, PoolError};
 use diesel::result::QueryResult;
 use diesel::RunQueryDsl;
 
-use self::models::{NewPeerConnection, NewSubstrateLog, PeerConnection};
+use self::models::{NewPeerConnection, NewTetcoreLog, PeerConnection};
 use crate::{DATABASE_URL, DB_POOL_SIZE};
 
 pub const RECORD_LIMIT: i32 = 10_000;
@@ -125,7 +125,7 @@ impl Handler<PeerConnection> for DbExecutor {
     }
 }
 
-pub struct LogBatch(pub Vec<NewSubstrateLog>);
+pub struct LogBatch(pub Vec<NewTetcoreLog>);
 
 impl Message for LogBatch {
     type Result = Result<(), &'static str>;
@@ -135,16 +135,16 @@ impl Handler<LogBatch> for DbExecutor {
     type Result = Result<(), &'static str>;
 
     fn handle(&mut self, msg: LogBatch, _: &mut Self::Context) -> Self::Result {
-        use crate::schema::substrate_logs;
+        use crate::schema::tetcore_logs;
         #[allow(unused_imports)]
-        use crate::schema::substrate_logs::dsl::*;
+        use crate::schema::tetcore_logs::dsl::*;
         let _ = self.with_connection(|conn| {
-            match diesel::insert_into(substrate_logs::table)
+            match diesel::insert_into(tetcore_logs::table)
                 .values(msg.0)
                 .execute(conn)
             {
                 Err(e) => error!("Error inserting logs: {:?}", e),
-                Ok(n) => debug!("Inserted {} substrate_logs", n),
+                Ok(n) => debug!("Inserted {} tetcore_logs", n),
             }
         });
         Ok(())
@@ -166,11 +166,11 @@ impl Handler<PurgeLogs> for DbExecutor {
     fn handle(&mut self, msg: PurgeLogs, _: &mut Self::Context) -> Self::Result {
         let _ = self.with_connection(|conn| {
             let query = format!(
-                "DELETE FROM substrate_logs \
+                "DELETE FROM tetcore_logs \
                  USING peer_connections \
                  WHERE peer_connections.id = peer_connection_id \
                  AND audit = false \
-                 AND substrate_logs.created_at < now() - {} * interval '1 hour'",
+                 AND tetcore_logs.created_at < now() - {} * interval '1 hour'",
                 msg.hours_valid
             );
             info!("Cleaning up database - deleting old log messages");
@@ -182,7 +182,7 @@ impl Handler<PurgeLogs> for DbExecutor {
         let _ = self.with_connection(|conn| {
             let query = "DELETE FROM peer_connections \
                  WHERE id NOT IN \
-                 (SELECT DISTINCT peer_connection_id FROM substrate_logs)";
+                 (SELECT DISTINCT peer_connection_id FROM tetcore_logs)";
             info!("Cleaning up database - deleting unreferenced peer_connections");
             match diesel::sql_query(query).execute(conn) {
                 Err(e) => error!("Error purging expired peer_connections: {:?}", e),

@@ -61,7 +61,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  created_at AS \"time\",\n  CAST(logs->>'round' as INTEGER) as round\nFROM substrate_logs\nWHERE\n  $__timeFilter(created_at)\n  AND logs->>'msg' = 'afg.announcing_blocks_to_voted_peers'\n  AND substrate_logs.node_ip LIKE '$node_ip%'\nORDER BY 1",
+          "rawSql": "SELECT\n  created_at AS \"time\",\n  CAST(logs->>'round' as INTEGER) as round\nFROM tetcore_logs\nWHERE\n  $__timeFilter(created_at)\n  AND logs->>'msg' = 'afg.announcing_blocks_to_voted_peers'\n  AND tetcore_logs.node_ip LIKE '$node_ip%'\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -73,7 +73,7 @@
               }
             ]
           ],
-          "table": "substrate_logs",
+          "table": "tetcore_logs",
           "timeColumn": "created_at",
           "timeColumnType": "timestamp",
           "where": [
@@ -168,7 +168,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  created_at AS \"time\",\n  CAST (logs->>'peers' as INTEGER) as peer_count\nFROM substrate_logs\nWHERE\n  $__timeFilter(created_at)\n  AND substrate_logs.node_ip LIKE '10.11.0.11%'\n  AND logs->>'msg' = 'system.interval'\nORDER BY 1",
+          "rawSql": "SELECT\n  created_at AS \"time\",\n  CAST (logs->>'peers' as INTEGER) as peer_count\nFROM tetcore_logs\nWHERE\n  $__timeFilter(created_at)\n  AND tetcore_logs.node_ip LIKE '10.11.0.11%'\n  AND logs->>'msg' = 'system.interval'\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -180,7 +180,7 @@
               }
             ]
           ],
-          "table": "substrate_logs",
+          "table": "tetcore_logs",
           "timeColumn": "created_at",
           "timeColumnType": "timestamp",
           "where": [
@@ -248,7 +248,7 @@
           "value": "10.11.0.12"
         },
         "datasource": "PostgreSQL",
-        "definition": "select distinct  split_part(node_ip, ':', 1) from substrate_logs",
+        "definition": "select distinct  split_part(node_ip, ':', 1) from tetcore_logs",
         "hide": 0,
         "includeAll": false,
         "label": null,
@@ -281,7 +281,7 @@
             "value": "10.24.3.1"
           }
         ],
-        "query": "select distinct  split_part(node_ip, ':', 1) from substrate_logs",
+        "query": "select distinct  split_part(node_ip, ':', 1) from tetcore_logs",
         "refresh": 0,
         "regex": "",
         "skipUrlSync": false,
@@ -324,7 +324,7 @@
     ]
   },
   "timezone": "",
-  "title": "Substrate Save",
+  "title": "Tetcore Save",
   "uid": "AsdLzYWWk",
   "version": 6
 }

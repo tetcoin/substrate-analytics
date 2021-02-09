@@ -1,1 +1,1 @@
-DROP INDEX substrate_logs_peerset_nodes_idx;
+DROP INDEX tetcore_logs_peerset_nodes_idx;

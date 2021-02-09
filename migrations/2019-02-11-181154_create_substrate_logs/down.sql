@@ -1,1 +1,1 @@
-DROP TABLE substrate_logs;
+DROP TABLE tetcore_logs;

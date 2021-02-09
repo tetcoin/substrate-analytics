@@ -1,18 +1,18 @@
 // Copyright 2019 Parity Technologies (UK) Ltd.
-// This file is part of Substrate Analytics.
+// This file is part of Tetcore Analytics.
 
-// Substrate Analytics is free software: you can redistribute it and/or modify
+// Tetcore Analytics is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
-// Substrate Analytics is distributed in the hope that it will be useful,
+// Tetcore Analytics is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 
 // You should have received a copy of the GNU General Public License
-// along with Substrate Analytics.  If not, see <http://www.gnu.org/licenses/>.
+// along with Tetcore Analytics.  If not, see <http://www.gnu.org/licenses/>.
 
 use super::DbExecutor;
 use crate::db::filters::Filters;
@@ -137,18 +137,18 @@ impl DbExecutor {
                     array_agg(jsonb_extract_path_text(peers.value, 'connected')::boolean) as connected, \
                     sl.created_at as ts \
                 FROM peer_connections pc \
-                    INNER JOIN substrate_logs sl \
+                    INNER JOIN tetcore_logs sl \
                 ON peer_connection_id = pc.id \
                     AND logs->>'msg' = 'system.network_state' \
                     AND sl.created_at > $1 AT TIME ZONE 'UTC', \
                     lateral jsonb_each(logs->'state'->'peerset'->'nodes') as peers \
                 WHERE sl.id = ANY (\
-                    SELECT DISTINCT ON (peer_id) substrate_logs.id \
-                    FROM substrate_logs \
+                    SELECT DISTINCT ON (peer_id) tetcore_logs.id \
+                    FROM tetcore_logs \
                     INNER JOIN peer_connections ON peer_connection_id = peer_connections.id \
                     WHERE logs ->> 'msg' = 'system.network_state' \
-                    AND substrate_logs.created_at > $2 AT TIME ZONE 'UTC' \
-                    ORDER BY peer_id, substrate_logs.created_at DESC \
+                    AND tetcore_logs.created_at > $2 AT TIME ZONE 'UTC' \
+                    ORDER BY peer_id, tetcore_logs.created_at DESC \
                     ) \
                 GROUP BY reporting_peer, sl.created_at \
                 LIMIT $3";
@@ -186,19 +186,19 @@ impl DbExecutor {
                     array_agg(jsonb_extract_path_text(peers.value, 'connected')::boolean) as connected, \
                     sl.created_at as ts \
                 FROM peer_connections pc \
-                    INNER JOIN substrate_logs sl \
+                    INNER JOIN tetcore_logs sl \
                 ON peer_connection_id = pc.id \
                     AND logs->>'msg' = 'system.network_state' \
                     AND sl.created_at > $1 AT TIME ZONE 'UTC', \
                     LATERAL jsonb_each(logs->'state'->'peerset'->'nodes') as peers \
                 WHERE key::text = ANY ($2) \
                     AND sl.id = ANY (\
-                    SELECT DISTINCT ON (peer_id) substrate_logs.id \
-                    FROM substrate_logs \
+                    SELECT DISTINCT ON (peer_id) tetcore_logs.id \
+                    FROM tetcore_logs \
                     INNER JOIN peer_connections ON peer_connection_id = peer_connections.id \
                     WHERE logs ->> 'msg' = 'system.network_state' \
-                    AND substrate_logs.created_at > $3 AT TIME ZONE 'UTC' \
-                    ORDER BY peer_id, substrate_logs.created_at DESC \
+                    AND tetcore_logs.created_at > $3 AT TIME ZONE 'UTC' \
+                    ORDER BY peer_id, tetcore_logs.created_at DESC \
                     ) \
                 GROUP BY reporting_peer, sl.created_at \
                 LIMIT $4";
@@ -236,7 +236,7 @@ impl DbExecutor {
                     jsonb_extract_path_text(peers.value, 'connected')::boolean as connected, \
                     sl.created_at as ts \
                 FROM peer_connections pc \
-                    INNER JOIN substrate_logs sl \
+                    INNER JOIN tetcore_logs sl \
                         ON peer_connection_id = pc.id, \
                 LATERAL jsonb_each(logs->'state'->'peerset'->'nodes') as peers \
                 WHERE logs->'state'->'peerset'->'nodes' @> ($1)::jsonb \

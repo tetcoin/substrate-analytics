@@ -45,7 +45,7 @@ table! {
 }
 
 table! {
-    substrate_logs (id) {
+    tetcore_logs (id) {
         id -> Int4,
         created_at -> Timestamp,
         logs -> Jsonb,
@@ -54,12 +54,12 @@ table! {
 }
 
 joinable!(benchmark_events -> benchmarks (benchmark_id));
-joinable!(substrate_logs -> peer_connections (peer_connection_id));
+joinable!(tetcore_logs -> peer_connections (peer_connection_id));
 
 allow_tables_to_appear_in_same_query!(
     benchmark_events,
     benchmarks,
     host_systems,
     peer_connections,
-    substrate_logs,
+    tetcore_logs,
 );

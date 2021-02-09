@@ -1,18 +1,18 @@
 // Copyright 2019 Parity Technologies (UK) Ltd.
-// This file is part of Substrate Analytics.
+// This file is part of Tetcore Analytics.
 
-// Substrate Analytics is free software: you can redistribute it and/or modify
+// Tetcore Analytics is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
-// Substrate Analytics is distributed in the hope that it will be useful,
+// Tetcore Analytics is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 
 // You should have received a copy of the GNU General Public License
-// along with Substrate Analytics.  If not, see <http://www.gnu.org/licenses/>.
+// along with Tetcore Analytics.  If not, see <http://www.gnu.org/licenses/>.
 
 #[macro_use]
 extern crate log;
@@ -38,7 +38,7 @@ use dotenv::dotenv;
 use std::env;
 use std::time::Duration;
 
-use crate::db::models::NewSubstrateLog;
+use crate::db::models::NewTetcoreLog;
 //use crate::db::peer_data::UpdateCache;
 use crate::db::*;
 use actix::prelude::*;
@@ -91,7 +91,7 @@ lazy_static! {
 }
 
 struct LogBuffer {
-    logs: Vec<NewSubstrateLog>,
+    logs: Vec<NewTetcoreLog>,
     db_arbiter: Recipient<LogBatch>,
 }
 
@@ -103,14 +103,14 @@ impl Actor for LogBuffer {
     }
 }
 
-impl Message for NewSubstrateLog {
+impl Message for NewTetcoreLog {
     type Result = Result<(), &'static str>;
 }
 
-impl Handler<NewSubstrateLog> for LogBuffer {
+impl Handler<NewTetcoreLog> for LogBuffer {
     type Result = Result<(), &'static str>;
 
-    fn handle(&mut self, msg: NewSubstrateLog, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: NewTetcoreLog, _: &mut Self::Context) -> Self::Result {
         self.logs.push(msg);
         Ok(())
     }
@@ -145,7 +145,7 @@ async fn main() -> std::io::Result<()> {
     dotenv().ok();
     env_logger::init();
     log_statics();
-    info!("Starting substrate-analytics");
+    info!("Starting tetcore-analytics");
     info!("Creating database pool");
     let pool = create_pool();
     info!("Starting DbArbiter with {} threads", *NUM_THREADS);

@@ -6,9 +6,9 @@ RUN apt-get update && \
 
 # build diesel first as there may be no changes and caching will be used
 RUN echo "building diesel-cli" && \
-  cargo install diesel_cli --root /substrate-analytics --bin diesel --force --no-default-features --features postgres
+  cargo install diesel_cli --root /tetcore-analytics --bin diesel --force --no-default-features --features postgres
 
-WORKDIR /substrate-analytics
+WORKDIR /tetcore-analytics
 
 # speed up docker build using pre-build dependencies
 # http://whitfin.io/speeding-up-rust-docker-builds/
@@ -20,23 +20,23 @@ COPY ./Cargo.toml ./Cargo.toml
 
 # this build step will cache your dependencies
 RUN cargo build --release
-RUN rm -rf ./src ./target/release/deps/substrate_analytics-*
+RUN rm -rf ./src ./target/release/deps/tetcore_analytics-*
 
 # copy your source tree
 COPY ./src ./src
 
 # ADD ./ ./
 
-RUN echo "building substrate-analytics" && \
+RUN echo "building tetcore-analytics" && \
   cargo build --release
 
 FROM debian:stretch-slim
 # metadata
 LABEL maintainer="devops-team@parity.io" \
   vendor="Parity Technologies" \
-  name="parity/substrate-analytics" \
-  description="Substrate Analytical and Visual Environment - Incoming telemetry" \
-  url="https://github.com/paritytech/substrate-analytics/" \
+  name="tetcoin/tetcore-analytics" \
+  description="Tetcore Analytical and Visual Environment - Incoming telemetry" \
+  url="https://github.com/tetcoin/tetcore-analytics/" \
   vcs-url="./"
 
 
@@ -49,14 +49,14 @@ RUN apt-get update && \
 
 RUN useradd -m -u 1000 -U -s /bin/sh -d /analytics analytics
 
-COPY --from=builder /substrate-analytics/target/release/substrate-analytics /usr/local/bin/
-COPY --from=builder /substrate-analytics/bin/diesel /usr/local/bin/
+COPY --from=builder /tetcore-analytics/target/release/tetcore-analytics /usr/local/bin/
+COPY --from=builder /tetcore-analytics/bin/diesel /usr/local/bin/
 
 COPY ./migrations /analytics/migrations
-COPY ./static /srv/substrate-analytics
+COPY ./static /srv/tetcore-analytics
 
 WORKDIR /analytics
 USER analytics
 ENV RUST_BACKTRACE 1
 
-ENTRYPOINT [ "/bin/sh", "-x", "-c", "/usr/local/bin/diesel migration run && exec /usr/local/bin/substrate-analytics"]
+ENTRYPOINT [ "/bin/sh", "-x", "-c", "/usr/local/bin/diesel migration run && exec /usr/local/bin/tetcore-analytics"]

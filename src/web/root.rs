@@ -1,22 +1,22 @@
 // Copyright 2019 Parity Technologies (UK) Ltd.
-// This file is part of Substrate Analytics.
+// This file is part of Tetcore Analytics.
 
-// Substrate Analytics is free software: you can redistribute it and/or modify
+// Tetcore Analytics is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
-// Substrate Analytics is distributed in the hope that it will be useful,
+// Tetcore Analytics is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 
 // You should have received a copy of the GNU General Public License
-// along with Substrate Analytics.  If not, see <http://www.gnu.org/licenses/>.
+// along with Tetcore Analytics.  If not, see <http://www.gnu.org/licenses/>.
 
 use super::metrics::Metrics;
 use crate::db::{
-    models::{NewPeerConnection, NewSubstrateLog, PeerConnection},
+    models::{NewPeerConnection, NewTetcoreLog, PeerConnection},
     DbExecutor,
 };
 use crate::{LogBuffer, CLIENT_TIMEOUT_S, HEARTBEAT_INTERVAL, WS_MAX_PAYLOAD};
@@ -241,7 +241,7 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for NodeSocket {
                 debug!("Searching for peerId for ip address: {}", &ip);
                 if let Some(_msg @ "system.connected") = logs["msg"].as_str() {
                     self.update_peer_info(&logs);
-                // Support older versions of substrate
+                // Support older versions of tetcore
                 } else if let Some(peer_id) = logs["state"]["peerId"].as_str() {
                     self.update_peer_id(peer_id);
                 } else if let Some(peer_id) = logs["network_state"]["peerId"].as_str() {
@@ -251,13 +251,13 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for NodeSocket {
             if let Some(ts) = logs["ts"].as_str() {
                 if let Ok(ts_utc) = DateTime::parse_from_rfc3339(ts) {
                     self.log_buffer
-                        .try_send(NewSubstrateLog {
+                        .try_send(NewTetcoreLog {
                             peer_connection_id: self.peer_connection.id,
                             created_at: ts_utc.naive_utc(),
                             logs,
                         })
                         .unwrap_or_else(|e| {
-                            error!("Failed to send NewSubstrateLog to DB actor - {:?}", e)
+                            error!("Failed to send NewTetcoreLog to DB actor - {:?}", e)
                         });
                 } else {
                     warn!("Unable to parse_from_rfc3339 for timestamp: {:?}", ts);

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Substrate Analytics - Benchmarks</title>
+    <title>Tetcore Analytics - Benchmarks</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
     <link rel=stylesheet href=https://cdn.jsdelivr.net/npm/pretty-print-json@0.2/dist/pretty-print-json.css>
@@ -17,7 +17,7 @@
         <div class="navbar-start">
             <div class=" navbar-item">
                 <h1 class="title">
-                    Substrate Analytics | Benchmarks
+                    Tetcore Analytics | Benchmarks
                 </h1>
             </div>
 
@@ -145,7 +145,7 @@
         const endEvent = Array.from(benchmarkEvents.values()).find((item) =>
             item.name === startEvent.name && item.phase === 'end'
         );
-        const peer_id = benchmarks.get(parseInt(benchmarkSelect.value)).setup.substrate.peerId;
+        const peer_id = benchmarks.get(parseInt(benchmarkSelect.value)).setup.tetcore.peerId;
         let logsRequest = `/nodes/logs?peer_id=${peer_id}&msg=tracing.profiling&start_time=${startEvent.created_at}&end_time=${endEvent.created_at}&limit=100000`;
 
         let currentTarget = targetSelect.value;

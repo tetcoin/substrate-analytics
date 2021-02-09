@@ -1,18 +1,18 @@
 // Copyright 2019 Parity Technologies (UK) Ltd.
-// This file is part of Substrate Analytics.
+// This file is part of Tetcore Analytics.
 
-// Substrate Analytics is free software: you can redistribute it and/or modify
+// Tetcore Analytics is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
-// Substrate Analytics is distributed in the hope that it will be useful,
+// Tetcore Analytics is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 
 // You should have received a copy of the GNU General Public License
-// along with Substrate Analytics.  If not, see <http://www.gnu.org/licenses/>.
+// along with Tetcore Analytics.  If not, see <http://www.gnu.org/licenses/>.
 
 use actix::prelude::*;
 use chrono::{NaiveDateTime, Utc};
@@ -161,7 +161,7 @@ impl DbExecutor {
                 "SELECT COUNT(log_type) as qty, log_type \
                  FROM ( \
                  SELECT logs->>'msg' AS log_type \
-                 FROM substrate_logs sl \
+                 FROM tetcore_logs sl \
                  LEFT JOIN peer_connections pc ON sl.peer_connection_id = pc.id \
                  WHERE peer_id = $1) t \
                  GROUP BY t.log_type",
@@ -187,7 +187,7 @@ impl DbExecutor {
                  CAST (logs->>'peers' as INTEGER) as peer_count, \
                  CAST (logs->>'ts' as TIMESTAMP) as ts, \
                  logs->'network_state'->'notConnectedPeers' as not_connected \
-                 FROM substrate_logs sl \
+                 FROM tetcore_logs sl \
                  LEFT JOIN peer_connections pc ON sl.peer_connection_id = pc.id \
                  WHERE logs->>'msg' = 'system.interval' \
                  AND peer_id = $1 \
@@ -249,7 +249,7 @@ impl DbExecutor {
                  logs, \
                  sl.created_at, \
                  peer_connection_id \
-                 FROM substrate_logs sl \
+                 FROM tetcore_logs sl \
                  LEFT JOIN peer_connections pc ON sl.peer_connection_id = pc.id \
                  WHERE peer_id = $1 \
                  AND sl.created_at > $2 \
@@ -292,7 +292,7 @@ impl DbExecutor {
                  logs, \
                  sl.created_at, \
                  peer_connection_id \
-                 FROM substrate_logs sl \
+                 FROM tetcore_logs sl \
                  LEFT JOIN peer_connections pc ON sl.peer_connection_id = pc.id \
                  WHERE peer_id = $1 \
                  AND sl.created_at > $2 \
@@ -337,7 +337,7 @@ impl DbExecutor {
                  logs, \
                  sl.created_at, \
                  peer_connection_id \
-                 FROM substrate_logs sl \
+                 FROM tetcore_logs sl \
                  LEFT JOIN peer_connections pc ON sl.peer_connection_id = pc.id \
                  WHERE peer_id = $1 \
                  AND sl.created_at > $2 \

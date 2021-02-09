@@ -1,23 +1,23 @@
 // Copyright 2020 Parity Technologies (UK) Ltd.
-// This file is part of Substrate Analytics.
+// This file is part of Tetcore Analytics.
 
-// Substrate Analytics is free software: you can redistribute it and/or modify
+// Tetcore Analytics is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
-// Substrate Analytics is distributed in the hope that it will be useful,
+// Tetcore Analytics is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 
 // You should have received a copy of the GNU General Public License
-// along with Substrate Analytics.  If not, see <http://www.gnu.org/licenses/>.
+// along with Tetcore Analytics.  If not, see <http://www.gnu.org/licenses/>.
 
 use crate::db::{
     peer_data::{
         time_secs_ago, PeerDataArray, PeerMessage, PeerMessageTime, PeerMessageTimeList,
-        PeerMessages, SubstrateLog,
+        PeerMessages, TetcoreLog,
     },
     DbExecutor,
 };
@@ -35,7 +35,7 @@ use std::time::Instant;
 
 #[derive(Debug)]
 pub struct PeerMessageCache {
-    pub deque: SliceDeque<SubstrateLog>,
+    pub deque: SliceDeque<TetcoreLog>,
     pub last_updated: NaiveDateTime,
     pub started_update: Option<Instant>,
     pub last_used: Instant,
@@ -488,7 +488,7 @@ mod tests {
                 peer_id: "Peer 1".to_string(),
                 msg: "Message 1".to_string(),
             },
-            data: vec![SubstrateLog {
+            data: vec![TetcoreLog {
                 log: Default::default(),
                 created_at: time_secs_ago(10),
             }],
@@ -501,7 +501,7 @@ mod tests {
                 peer_id: "Peer 2".to_string(),
                 msg: "Message 2".to_string(),
             },
-            data: vec![SubstrateLog {
+            data: vec![TetcoreLog {
                 log: Default::default(),
                 created_at: time_secs_ago(10),
             }],
@@ -563,15 +563,15 @@ mod tests {
         };
         let t1 = time_secs_ago(((*CACHE_EXPIRY_S) + 1).into());
         let t2 = time_secs_ago(((*CACHE_EXPIRY_S) - 1).into());
-        let sl1 = SubstrateLog {
+        let sl1 = TetcoreLog {
             log: Default::default(),
             created_at: t1,
         };
-        let sl2 = SubstrateLog {
+        let sl2 = TetcoreLog {
             log: Default::default(),
             created_at: t2.clone(),
         };
-        let sl3 = SubstrateLog {
+        let sl3 = TetcoreLog {
             log: Default::default(),
             created_at: t2,
         };

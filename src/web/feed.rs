@@ -1,5 +1,5 @@
 use crate::cache::{Cache, Interest, Subscription};
-use crate::db::peer_data::{PeerDataArray, PeerMessage, SubstrateLog};
+use crate::db::peer_data::{PeerDataArray, PeerMessage, TetcoreLog};
 use crate::web::metrics::Metrics;
 use actix::prelude::*;
 use actix_web::{web, web::Data, Error, HttpRequest, HttpResponse};
@@ -396,5 +396,5 @@ pub struct Aggregate {
 struct AggregateSubscription {
     subscription: Subscription,
     aggregate: Aggregate,
-    aggregate_remainder: VecDeque<SubstrateLog>,
+    aggregate_remainder: VecDeque<TetcoreLog>,
 }

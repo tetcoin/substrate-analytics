@@ -1,5 +1,5 @@
 [package]
-name = "substrate-analytics"
+name = "tetcore-analytics"
 version = "0.1.4"
 authors = ["Matt Rutherford <matt@parity.io>"]
 edition = "2018"

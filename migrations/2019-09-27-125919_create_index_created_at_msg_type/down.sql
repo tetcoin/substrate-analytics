@@ -1,1 +1,1 @@
-DROP INDEX substrate_logs_created_at_msg_idx;
+DROP INDEX tetcore_logs_created_at_msg_idx;

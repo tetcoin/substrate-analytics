@@ -1,18 +1,18 @@
 // Copyright 2020 Parity Technologies (UK) Ltd.
-// This file is part of Substrate Analytics.
+// This file is part of Tetcore Analytics.
 
-// Substrate Analytics is free software: you can redistribute it and/or modify
+// Tetcore Analytics is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
-// Substrate Analytics is distributed in the hope that it will be useful,
+// Tetcore Analytics is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 
 // You should have received a copy of the GNU General Public License
-// along with Substrate Analytics.  If not, see <http://www.gnu.org/licenses/>.
+// along with Tetcore Analytics.  If not, see <http://www.gnu.org/licenses/>.
 
 use actix::prelude::*;
 use chrono::{DateTime, Local, NaiveDateTime};
@@ -27,7 +27,7 @@ use std::time::{Duration, SystemTime};
 use super::{filters::Filters, DbExecutor, RECORD_LIMIT};
 
 #[derive(Serialize, Deserialize, QueryableByName, Clone, Debug)]
-pub struct SubstrateLog {
+pub struct TetcoreLog {
     #[sql_type = "Jsonb"]
     #[serde(flatten)]
     pub log: Value,
@@ -38,7 +38,7 @@ pub struct SubstrateLog {
 #[derive(Serialize, Debug)]
 pub struct PeerDataArray {
     pub peer_message: PeerMessage,
-    pub data: Vec<SubstrateLog>,
+    pub data: Vec<TetcoreLog>,
 }
 
 impl Message for PeerDataArray {
@@ -104,7 +104,7 @@ impl DbExecutor {
             let query = sql_query(
                 "SELECT sl.logs - 'ts' - 'id' - 'msg' - 'level' - 'line' as log, \
                  sl.created_at \
-                 FROM substrate_logs sl \
+                 FROM tetcore_logs sl \
                  LEFT JOIN peer_connections pc ON sl.peer_connection_id = pc.id \
                  WHERE peer_id = $1 \
                  AND sl.created_at > $2 \
@@ -120,7 +120,7 @@ impl DbExecutor {
                 "get_profiling query: {}",
                 diesel::debug_query::<diesel::pg::Pg, _>(&query)
             );
-            let result: QueryResult<Vec<SubstrateLog>> = query.get_results(conn);
+            let result: QueryResult<Vec<TetcoreLog>> = query.get_results(conn);
             result
         }) {
             Ok(Ok(data)) => {
