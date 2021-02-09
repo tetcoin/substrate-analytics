@@ -2,6 +2,7 @@
 name = "tetcore-analytics"
 version = "0.1.4"
 authors = ["Matt Rutherford <matt@parity.io>"]
+description = "Tetcore Telemetry Analytics for Rust"
 edition = "2018"
 license = "GPL-3.0"
 
