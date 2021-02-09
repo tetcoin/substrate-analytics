@@ -187,7 +187,7 @@ async fn main() -> std::io::Result<()> {
             .data(log_buffer.clone())
             .data(cache.clone())
             .data(actix_web::web::JsonConfig::default().limit(4096))
-            .wrap(middleware::NormalizePath)
+            .wrap(pub middleware::NormalizePath)
             .wrap(middleware::Logger::default())
             .configure(web::nodes::configure)
             .configure(web::reputation::configure)
