@@ -1,4 +1,4 @@
-## Substrate Analytics
+## Tetcore Analytics
 
 \* to connect to substrate-analytics you must whitelist your IP address in `deployment.template.yml`
 
